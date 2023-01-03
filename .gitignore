@@ -2,3 +2,7 @@
 /examples/target/
 /examples/Cargo.lock
 target
+/PERSIAN/book/
+/PERSIAN/examples/target/
+/PERSIAN/examples/Cargo.lock
+/PERSIAN/target
