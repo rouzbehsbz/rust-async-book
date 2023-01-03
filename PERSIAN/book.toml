@@ -3,7 +3,7 @@ authors = ["rouzbehsbz"]
 language = "en"
 multilingual = false
 src = "src"
-title = "Asynchronous Programming in Rust (Persian/Farsi)"
+title = "برنامه نویسی Async در زبان Rust"
 
 [output.html]
 default-theme = "rust"
