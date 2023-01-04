@@ -5,46 +5,16 @@
 
 body {
     font-family: "vazir";
+}
+
+.chapter {
     direction: rtl;
 }
 
-#sidebar {
-    left:unset;
-    right: 0;
+.menu-title {
+    direction: rtl;
 }
 
-#page-wrapper{
-    margin-right: var(--sidebar-width);
-    margin-left: auto;
+.content {
+    direction: rtl;
 }
-
-#menu-bar{
-    /* flex-direction: row-reverse; */
-}
-
-#sidebar-toggle{
-    display: none;
-}
-
-.nav-chapters.next{
-    left: var(--page-padding);
-    right:unset;
-}
-
-.nav-chapters.next i{
-    transform: rotate(180deg);
-    }
-
-.nav-chapters.previous i{
-        transform: rotate(180deg);
-    }
-
-/* .sidebar-hidden{
-    transform: translateX(calc(100% + var(--sidebar-width)));
-} */
-
-/* {
-    float: left;
-    right: 0;
-    margin-right: var(--sidebar-width);
-} */
