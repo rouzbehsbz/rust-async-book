@@ -9,7 +9,12 @@ title = "برنامه نویسی Async در زبان Rust"
 default-theme = "rust"
 copy-fonts = true
 additional-css = ["theme/custom.css"]
+git-repository-url = "https://github.com/rouzbehsbz/rust-async-book"
+site-url = "/rust-async-book/"
 
 [output.html.font]
 enable = true
 woff = true
+
+[build]
+create-missing = false
