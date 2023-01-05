@@ -4,7 +4,7 @@ on:
   pull_request:
   push:
     branches:
-      - french-unreleased
+      - master
 
 jobs:
   publish-book:
