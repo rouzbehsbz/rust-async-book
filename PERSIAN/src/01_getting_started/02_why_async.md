@@ -1,126 +1,70 @@
 # چرا Async ؟
 
-We all love how Rust empowers us to write fast, safe software.
-But how does asynchronous programming fit into this vision?
+ما همه عاشق قدرتی هستیم که Rust در نوشتن نرم افزار های سریع و امن میده، اما برنامه نویسی Async چجوری میتونه تو این دیدگاه جا داشته باشه ؟
 
-Asynchronous programming, or async for short, is a _concurrent programming model_
-supported by an increasing number of programming languages.
-It lets you run a large number of concurrent
-tasks on a small number of OS threads, while preserving much of the
-look and feel of ordinary synchronous programming, through the
-`async/await` syntax.
+برنامه نویسی Asynchronous یا Async، یک _مدل برنامه نویسی همزمان_ هست که توسط تعداد زیادی از زبان های برنامه نویسی پشتیبانی میشه، که این امکان رو به شما میده که تعداد زیادی عملیات رو روی تعداد کمی thread سیستم عاملی انجام بدید. این در حالیه که کدی که مینویسید به خاطر کلید واژه های `async/await` از نظر ظاهری و حسی خیلی شبیه برنامه های عادی sync هست.
 
-## Async vs other concurrency models
+## مقایسه Async و دیگر مدل های همزمانی
 
-Concurrent programming is less mature and "standardized" than
-regular, sequential programming. As a result, we express concurrency
-differently depending on which concurrent programming model
-the language is supporting.
-A brief overview of the most popular concurrency models can help
-you understand how asynchronous programming fits within the broader
-field of concurrent programming:
+برنامه نویسی همزمان نسبت به برنامه نویسی معمولی و متوالی هنوز پخته نشده و استاندارد هاش کمتره، در نتیجه بسته به اینکه اون زبان برنامه نویسی از کدوم مدل همزمانی پشتیبانی میکنه، همزمانی رو به صورت های مختلفی میشه بیان کرد. یه مرور سریع روی محبوب ترین مدل های برنامه نویسی همزمان میتونه بهتون در فهمیدن اینکه برنامه نویسی Async چه جایگاهی در این حوزه وسیع داره کمک کنه:
 
-- **OS threads** don't require any changes to the programming model,
-  which makes it very easy to express concurrency. However, synchronizing
-  between threads can be difficult, and the performance overhead is large.
-  Thread pools can mitigate some of these costs, but not enough to support
-  massive IO-bound workloads.
-- **Event-driven programming**, in conjunction with _callbacks_, can be very
-  performant, but tends to result in a verbose, "non-linear" control flow.
-  Data flow and error propagation is often hard to follow.
-- **Coroutines**, like threads, don't require changes to the programming model,
-  which makes them easy to use. Like async, they can also support a large
-  number of tasks. However, they abstract away low-level details that
-  are important for systems programming and custom runtime implementors.
-- **The actor model** divides all concurrent computation into units called
-  actors, which communicate through fallible message passing, much like
-  in distributed systems. The actor model can be efficiently implemented, but it leaves
-  many practical issues unanswered, such as flow control and retry logic.
+- **Thread های سیستم عاملی:** تو این روش نیازی به تغییر تو مدل برنامه نویسی وجود نداره، که همین موضوع رسیدن به مدل همزمانی رو خیلی آسون تر میکنه. البته sync کردن و همزمان کردن thread ها خودش میتونه در مواقعی خیلی سخت باشه، و در ضمن تو این روش سربار و افت سرعت قابل توجه هست. روش هایی مثل Thread Pool میتونه یکم تو کم کردن این سربار ها و افزایش سرعت کارساز باشه، ولی در نهایت برای حجم زیاد عملیات هایی که محدود به I/O هستند کافی نیست.
 
-In summary, asynchronous programming allows highly performant implementations
-that are suitable for low-level languages like Rust, while providing
-most of the ergonomic benefits of threads and coroutines.
+- **برنامه نویسی Event محور:** این روش با استفاده از _callback_ ها میتونه سرعت رو افزایش بده، ولی منجر به ایجاد یه جریان غیر خطی توی برنامه میشه که پیگیری و عیب یابی از این نوع برنامه رو سخت میکنه.
 
-## Async in Rust vs other languages
+- **روش Coroutine:** مثل thread ها تغیری توی مدل برنامه نویسی نیاز ندارن، که استفاده ازشون رو راحت تر میکنه. مثل Async میتونن تعداد زیادی عملیات رو به طور همزمان پوشش بدن. با این وجود یه سری جزئیات سطح پایین که برای برنامه نویسی سیستم و runtime های خاص مهم هستند رو در نظر نمیگیره.
 
-Although asynchronous programming is supported in many languages, some
-details vary across implementations. Rust's implementation of async
-differs from most languages in a few ways:
+- **مدل بازیگر (Actor):** در این روش تمام محاسبات همزمان به صورت واحد هایی به اسم بازیگر تقسیم میشن، که با هم در ارتباط هستن، دقیقا شبیه سیستم های توزیع شده. این روش میتونه خیلی بهینه پیاده سازی بشه اما بسیاری از مسائل کاربردی مثل کنترل جریان و منطق مجدد (مثلا بعد از یک خطا) رو بی پاسخ میزاره.
 
-- **Futures are inert** in Rust and make progress only when polled. Dropping a
-  future stops it from making further progress.
-- **Async is zero-cost** in Rust, which means that you only pay for what you use.
-  Specifically, you can use async without heap allocations and dynamic dispatch,
-  which is great for performance!
-  This also lets you use async in constrained environments, such as embedded systems.
-- **No built-in runtime** is provided by Rust. Instead, runtimes are provided by
-  community maintained crates.
-- **Both single- and multithreaded** runtimes are available in Rust, which have
-  different strengths and weaknesses.
+به طور خلاصه، برنامه نویسی Async این اجازه رو به شما میده که برنامه های فوق العاده بهینه و با سرعت بالا برای زبان های سطح پایینی مثل Rust پیاده سازی کنید، در حالی که بسیاری از مزایای thread ها و دیگر روش ها رو هم پوشش میدن.
 
-## Async vs threads in Rust
+## Async در Rust در مقایسه با بقیه زبان ها
 
-The primary alternative to async in Rust is using OS threads, either
-directly through [`std::thread`](https://doc.rust-lang.org/std/thread/)
-or indirectly through a thread pool.
-Migrating from threads to async or vice versa
-typically requires major refactoring work, both in terms of implementation and
-(if you are building a library) any exposed public interfaces. As such,
-picking the model that suits your needs early can save a lot of development time.
+اگرچه برنامه نویسی Async توسط خیلی از زبان ها پشتیبانی میشه، ولی تو بعضی از جزئیات وقتی به قسمت پیاده سازی میرسیم با هم دیگه فرق دارن. پیاده سازی Async ولی روشی که تو Rust ازش استفاده میشه با بیشتر زبان ها تو زمینه های زیر فرق داره:
 
-**OS threads** are suitable for a small number of tasks, since threads come with
-CPU and memory overhead. Spawning and switching between threads
-is quite expensive as even idle threads consume system resources.
-A thread pool library can help mitigate some of these costs, but not all.
-However, threads let you reuse existing synchronous code without significant
-code changes—no particular programming model is required.
-In some operating systems, you can also change the priority of a thread,
-which is useful for drivers and other latency sensitive applications.
+- **Future های بی جان:** Future ها توی Rust تا وقتی صداشون نزنید و چیزی که قرار بوده بهتون بدن رو ازشون نگیرید پردازشی رو جلو نمیبرن. نگه نداشتن Future ها باعث میشه عملیاتی که داشتن انجام میدادن دیگه تا آخر انجام نشه و متوقف بشه.
 
-**Async** provides significantly reduced CPU and memory
-overhead, especially for workloads with a
-large amount of IO-bound tasks, such as servers and databases.
-All else equal, you can have orders of magnitude more tasks than OS threads,
-because an async runtime uses a small amount of (expensive) threads to handle
-a large amount of (cheap) tasks.
-However, async Rust results in larger binary blobs due to the state
-machines generated from async functions and since each executable
-bundles an async runtime.
+- **Async بدون هزینه هست:** توی Rust استفاده از Async هزینه ای نداره، این یعنی شما از نظر سخت افزاری فقط هزینه چیزایی که استفاده میکنید رو میدید، نکته قابل توجهش اینه که میتونید بدون گرفتن فضای heap از ram از Async استفاده کنید و به صورت پویا نتیجه عملیات Async رو انجام بدید که برای سرعت سیستم خیلی چیزه خوبیه.
 
-On a last note, asynchronous programming is not _better_ than threads,
-but different.
-If you don't need async for performance reasons, threads can often be
-the simpler alternative.
+- **Runtime حاظر و آماده ای وجود نداره:** توی Rust برای داستان Async هیچ runtime آماده ای وجود نداره. در عوض runtime ها توسط جامعه برنامه نویسان Rust نوشته شده و به صورت پکیج های قابل نصب crate موجوده.
 
-### Example: Concurrent downloading
+- **runtime های single-thread و multi-thread موجوده:** توی Rust هر دو نوع runtime های single-thread ای و multi-thread ای موجوده، که البته هر کدوم مزایا و معایب خودشونو دارن.
 
-In this example our goal is to download two web pages concurrently.
-In a typical threaded application we need to spawn threads
-to achieve concurrency:
+## تفاوت Async و استفاده از Thread ها در Rust
+
+جایگزین اصلی برای Async در Rust استفاده از thread های سیستم عاملی هست، چه به صورت مستقیم با استقاده از [`std::thread`](https://doc.rust-lang.org/std/thread/) یا به صورت غیر مستقیم با استفاده از thread pool.
+مهاجرت از thread ها به Async و برعکس معمولا نیاز به بازنویسی اساسی توی کد داره، هم از نظر پیاده سازی و هم نظر ساختن یک راه ارتباطی عمومی برای قسمت های مختلف (وقتی مثلا یک کتابخانه میسازید). به همین خاطر انتخاب مدلی که دقیقا طبق نیاز های سیستم شما باشه میتونه تو زمان پیاده سازی خیلی صرفه جویی کنه.
+
+**Thread های سیستم عاملی** برای انجام task ها و عملیات مختلف تو مقیاس کم مناسب هستن، چون thread ها یه سربار اضافه تری برای CPU و حافظه (RAM) هستن. ساخت و تعویض بین thread هااز نظر سخت افزاری خیلی هزینه بره حتی thread هایی که استفاده نمیشن یا به اصطلاح idle هستن هم منابع مصرف میکنن.
+استفاده از thread pool میتونه تو کم کردن این هزینه ها تاثیر داشته باشه، ولی نه تو همه چی.
+اگرچه thread ها این اجازه رو به شما میدن که از همون کد عادی sync بدون تغییرات خیلی اساسی بتونید استفاده کنید و هیچ مدل برنامه نویسی نیاز نداره.
+همچنین توی بعضی سیستم عامل ها میتونید اولویت اجرای thread ها رو عوض کنید، که میتونه خیلی چیزه مفیدی برای driver ها یا برنامه هایی که خیلی حساس به زمان اجرا و latency هستن باشه.
+
+**روش Async** به طور چشمگیری استفاده از CPU و حافظه رو کاهش میده، مخصوصا برای کارهایی که به طور خاص I/O زیادی دارن، مثل سرور ها یا دیتابیس ها. به همین خاطر میتونید task ها و عملیات بیشتری نسبت به thread های سیستم عاملی داشته باشید، چون یک runtime ای که به صورت async هست از تعداد thread های کمتر (که برای ما هزینه بر بودن) برای اجرای عملیات و task های بیشتر (که از نظر منابعی که استفاده میکنن کم هزینه تر هستن) استفاده میکنه.
+
+یک نکته ای که آخر باید اشاره کنیم اینه که برنامه نویسی Async _بهتر_ از thread ها نیست، در واقع تفاوتشونه که مهمه.
+اگه به Async برای رسیدن به نتایج بهتر توی سرعت نیاز ندارید، thread ها معمولا جایگزین های راحت تری هستن.
+
+### مثالی از دانلود فایل ها به صورت همزمان
+
+تو این مثال هدف ما دانلود دو تا صفحه وب به صورت همزمانه.
+توی یه برنامه معمول برای اینکار نیاز داریم که thread های جدید ایجاد کنیم تا به همزمانی برسیم:
 
 ```rust,ignore
 {{#include ../../examples/01_02_why_async/src/lib.rs:get_two_sites}}
 ```
 
-However, downloading a web page is a small task; creating a thread
-for such a small amount of work is quite wasteful. For a larger application, it
-can easily become a bottleneck. In async Rust, we can run these tasks
-concurrently without extra threads:
+این درحالیه که دانلود کردن یک صفحه وب یک کار خیلی کوچیکه و ایجاد thread جدید برای همچین کار کوچیکی واقعا هزینه سخت افزاری زیادی از ما میگیره. برای برنامه های بزرگتر این مسئله خیلی راحت میتونه تبدیل به یه معضل بزرگ بشه، توی برنامه نویسی Async در Rust میتونیم همین کار رو بکنیم بدون نیاز به ساختن thread های اضافی:
 
 ```rust,ignore
 {{#include ../../examples/01_02_why_async/src/lib.rs:get_two_sites_async}}
 ```
 
-Here, no extra threads are created. Additionally, all function calls are statically
-dispatched, and there are no heap allocations!
-However, we need to write the code to be asynchronous in the first place,
-which this book will help you achieve.
+اینجا هیچ thread اضافه ای ساخته نشده. تمام توابعی که صداشون زدیم به صورت ثابت استفاده شدن، و هیچ استفاده ای از قسمت heap توی ram نکردیم!
+اگرچه نیاز داریم که کد رو به صورت async بنویسم در وحله اول، که این کتاب دقیقا میخواد به شما تو رسیدن این هدف کمک کنه.
 
-## Custom concurrency models in Rust
+## مدل های همزمانی شخصی سازی شده در Rust
 
-On a last note, Rust doesn't force you to choose between threads and async.
-You can use both models within the same application, which can be
-useful when you have mixed threaded and async dependencies.
-In fact, you can even use a different concurrency model altogether,
-such as event-driven programming, as long as you find a library that
-implements it.
+در آخر باید بگیم که Rust شما رو اجبار به انتخاب بین دو مدل thread و async نمیکنه.
+شما میتونید از هر دو مدل توی یه برنامه استفاده کنید، که میتونه خیلی هم مفید باشه وقتی thread هایی دارید که به عملیات های async وابستگی دارن.
+در حقیقت، شما میتونید حتی از مدل های همزمانی مختلف دیگه هم استفاده کنید مثل مدل Event محور یا چیزای دیگه، تا وقتی کتابخانه هایی دارید که اینا رو پیاده سازی کردن.
