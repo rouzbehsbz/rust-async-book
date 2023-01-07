@@ -18,3 +18,7 @@ body {
 .content {
     direction: rtl;
 }
+
+code {
+    direction: ltr;
+}
