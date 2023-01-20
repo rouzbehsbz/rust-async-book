@@ -1,5 +1,6 @@
 # Table of Contents
 
+- [چند تا نکته](00_introduction/01_introduction.md)
 - [مقدمه و شروع کار](01_getting_started/01_chapter.md)
   - [چرا Async ؟](01_getting_started/02_why_async.md)
   - [وضعیت کنونی Rust در حالت Async](01_getting_started/03_state_of_async_rust.md)
