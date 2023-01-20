@@ -1,8 +1,10 @@
-# async-book
-Asynchronous Programming in Rust
+# rust-async-book
 
-## Requirements
-The async book is built with [`mdbook`], you can install it using cargo.
+برنامه نویسی Async در Rust
+
+## پیش نیاز ها
+
+این کتاب با استفاده از [`mdbook`] ساخته شده است، شما میتونید این پکیج رو با cargo نصب کنید.
 
 ```
 cargo install mdbook
@@ -11,15 +13,18 @@ cargo install mdbook-linkcheck
 
 [`mdbook`]: https://github.com/rust-lang/mdBook
 
-## Building
-To create a finished book, run `mdbook build` to generate it under the `book/` directory.
+## ساخت نسخته قابل نمایش از کتاب
+
+برای ساختن نسخه نهایی و قابل اجرای کتاب، دستور `mdbook build` رو اجرا کنید تا نسخه نهایی رو تو پوشه `/book` ببینید.
+
 ```
 mdbook build
 ```
 
 ## Development
-While writing it can be handy to see your changes, `mdbook serve` will launch a local web
-server to serve the book.
+
+اگه میخواید کتاب توسط یک وب سرور آماده روی شبکه لوکالتون بارگزاری شه میتونید خیلی راحت از دستور `mdbook serve` استفاده کنید.
+
 ```
 mdbook serve
 ```
