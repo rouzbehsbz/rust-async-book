@@ -19,11 +19,6 @@ Future ها میتونن با استفاده از صدا زدن تابع `poll` 
 {{#include ../../examples/02_02_future_trait/src/lib.rs:socket_read}}
 ```
 
-This model of `Future`s allows for composing together multiple asynchronous
-operations without needing intermediate allocations. Running multiple futures
-at once or chaining futures together can be implemented via allocation-free
-state machines, like this:
-
 این مدل از `Future` ها امکان ترکیب چندین عملیات async رو بدون نیاز به allocate کردن state های اضافی فراهم می کنند.
 اجرا کردن چندین Future به صورت یکجا یا به صورت زنجیره ای از Future ها میتونه بدون نیاز به allocation های اضافی state های مربوطه به صورت زیر پیاده سازی بشه:
 
