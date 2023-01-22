@@ -16,9 +16,6 @@
 
 - بیشتر trait های پایه ای، type ها و توابع Async مثل [`Future`](https://doc.rust-lang.org/std/future/trait.Future.html) که توسط کتابخانه اصلی و استاندارد Rust فراهم شده.
 - کلیدواژه های `async/await` توسط خود کامپایلر Rust پشتیبانی میشه.
-- Many utility types, macros and functions are provided by the
-  [`futures`](https://docs.rs/futures/) crate. They can be used in any async
-  Rust application.
 - خیلی از type ها، ماکرو ها و توابع توسط پیکیجی به اسم [`futures`](https://docs.rs/futures/) فراهم شده. که میشه ازشون داخل هر برنامه Async که با Rust نوشته شده استفاده کرد.
 - اجرا کردن کد async، IO ها و ساخت task های جدید توسط runtime های async صورت میگیره. دو تا از این runtime ها Tokio و async-std هستن. خیلی از برنامه های Async و کتابخانه های Async داخل crate به یک runtime خاص وابستگی دارن. برای جزئیات بیشتر بخش ["اکوسیستم کد Async"](../08_ecosystem/00_chapter.md) رو مطالعه کنید.
 
