@@ -1,0 +1,24 @@
+@font-face {
+    font-family: "vazir";
+    src: url("vazir.ttf");
+}
+
+body {
+    font-family: "vazir";
+}
+
+.chapter {
+    direction: rtl;
+}
+
+.menu-title {
+    direction: rtl;
+}
+
+.content {
+    direction: rtl;
+}
+
+code {
+    direction: ltr;
+}

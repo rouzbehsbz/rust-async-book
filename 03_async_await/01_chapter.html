@@ -1,0 +1,276 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js rust">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>async/await - برنامه نویسی Async در زبان Rust</title>
+        <!-- Custom HTML head -->
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="../theme/custom.css">
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "rust";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('rust')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="../00_introduction/01_introduction.html"><strong aria-hidden="true">1.</strong> چند تا نکته</a></li><li class="chapter-item expanded "><a href="../01_getting_started/01_chapter.html"><strong aria-hidden="true">2.</strong> مقدمه و شروع کار</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../01_getting_started/02_why_async.html"><strong aria-hidden="true">2.1.</strong> چرا Async ؟</a></li><li class="chapter-item expanded "><a href="../01_getting_started/03_state_of_async_rust.html"><strong aria-hidden="true">2.2.</strong> وضعیت کنونی Rust در حالت Async</a></li><li class="chapter-item expanded "><a href="../01_getting_started/04_async_await_primer.html"><strong aria-hidden="true">2.3.</strong> کلیدواژه های async/await</a></li></ol></li><li class="chapter-item expanded "><a href="../02_execution/01_chapter.html"><strong aria-hidden="true">3.</strong> زیر و بم اجرای کد های Async با Future</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../02_execution/02_future.html"><strong aria-hidden="true">3.1.</strong> نگاه دقیق به Future Trait</a></li><li class="chapter-item expanded "><a href="../02_execution/03_wakeups.html"><strong aria-hidden="true">3.2.</strong> بیدار کردن یک عملیات Async با Waker</a></li><li class="chapter-item expanded "><a href="../02_execution/04_executor.html"><strong aria-hidden="true">3.3.</strong> پیاده سازی یک اجراکننده برای عملیات Async</a></li><li class="chapter-item expanded "><a href="../02_execution/05_io.html"><strong aria-hidden="true">3.4.</strong> اجراکننده ها و IO سیستم</a></li></ol></li><li class="chapter-item expanded "><a href="../03_async_await/01_chapter.html" class="active"><strong aria-hidden="true">4.</strong> async/await</a></li><li class="chapter-item expanded "><a href="../04_pinning/01_chapter.html"><strong aria-hidden="true">5.</strong> Pin کردن</a></li><li class="chapter-item expanded "><a href="../05_streams/01_chapter.html"><strong aria-hidden="true">6.</strong> Stream ها</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../05_streams/02_iteration_and_concurrency.html"><strong aria-hidden="true">6.1.</strong> پیمایش و همزمانی ها در کد</a></li></ol></li><li class="chapter-item expanded "><a href="../06_multiple_futures/01_chapter.html"><strong aria-hidden="true">7.</strong> اجرا کردن چندین Future به طور همزمان</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../06_multiple_futures/02_join.html"><strong aria-hidden="true">7.1.</strong> ماکرو !join</a></li><li class="chapter-item expanded "><a href="../06_multiple_futures/03_select.html"><strong aria-hidden="true">7.2.</strong> ماکرو !select</a></li><li class="chapter-item expanded "><div><strong aria-hidden="true">7.3.</strong> تکمیل نشده: Spawn کردن</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">7.4.</strong> تکمیل نشده: متوقف کردن و Timeout ها</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">7.5.</strong> تکمیل نشده: Future های بدون ترتیب</div></li></ol></li><li class="chapter-item expanded "><a href="../07_workarounds/01_chapter.html"><strong aria-hidden="true">8.</strong> راه حل هایی که باید بدونیم و دوستشون داشته باشیم</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../07_workarounds/02_err_in_async_blocks.html"><strong aria-hidden="true">8.1.</strong> علامت ؟ در بلوک های کد Async</a></li><li class="chapter-item expanded "><a href="../07_workarounds/03_send_approximation.html"><strong aria-hidden="true">8.2.</strong> Send و همزمانی ترد ها</a></li><li class="chapter-item expanded "><a href="../07_workarounds/04_recursion.html"><strong aria-hidden="true">8.3.</strong> بازگشتی ها</a></li><li class="chapter-item expanded "><a href="../07_workarounds/05_async_in_traits.html"><strong aria-hidden="true">8.4.</strong> Async در Trait ها</a></li></ol></li><li class="chapter-item expanded "><a href="../08_ecosystem/00_chapter.html"><strong aria-hidden="true">9.</strong> اکوسیستم کد Async</a></li><li class="chapter-item expanded "><a href="../09_example/00_intro.html"><strong aria-hidden="true">10.</strong> پروژه نهایی: سرور HTTP</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../09_example/01_running_async_code.html"><strong aria-hidden="true">10.1.</strong> اجرا کردن کد Async</a></li><li class="chapter-item expanded "><a href="../09_example/02_handling_connections_concurrently.html"><strong aria-hidden="true">10.2.</strong> پردازش کانکشن ها به صورت همزمان</a></li><li class="chapter-item expanded "><a href="../09_example/03_tests.html"><strong aria-hidden="true">10.3.</strong> تست کردن سرور</a></li></ol></li><li class="chapter-item expanded "><div><strong aria-hidden="true">11.</strong> تکمیل نشده: I/O</div></li><li><ol class="section"><li class="chapter-item expanded "><div><strong aria-hidden="true">11.1.</strong> تکمیل نشده: AsyncRead و AsyncWrite</div></li></ol></li><li class="chapter-item expanded "><div><strong aria-hidden="true">12.</strong> تکمیل نشده: الگو های طراحی در برنامه نویسی Async: راه حل ها و پیشنهاد ها</div></li><li><ol class="section"><li class="chapter-item expanded "><div><strong aria-hidden="true">12.1.</strong> تکمیل نشده: مدل سازی سرور ها و الگوی طراحی سیستم های Request/Response</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">12.2.</strong> تکمیل نشده: مدیریت State های اشتراکی و Share شده</div></li></ol></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">برنامه نویسی Async در زبان Rust</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/rouzbehsbz/rust-async-book" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="asyncawait"><a class="header" href="#asyncawait"><code>async</code>/<code>.await</code></a></h1>
+<p>توی <a href="../01_getting_started/04_async_await_primer.html">فصل اول</a> نگاه کوتاهی به ‍‍<code>async</code>/<code>.await</code> داشتیم.
+توی این فصل با جزئیات بیشتری روی <code>async</code>/<code>.await</code> بحث میکنیم و میبینم چجوری کد async با کد عادی که قبلا تو Rust میدیدیم فرق داره.</p>
+<p><code>async</code>/<code>.await</code> کلیدواژه های ویژه ای هستند که قدرت برنامه نویسی async رو به Rust میدن و اجازه میدن قدرت به thread برگرده و عملیات بعدی رو انجام بده در حالی که منتظر جواب یه کد async هست.</p>
+<p>دو راه اصلی برای استفاده از <code>async</code> وجود داره: یکی <code>async fn</code> و اون یکی بلاک های <code>async</code> هستن.
+که هر کدوم مقداری رو بر میگردونن که trait ‍‍<code>‍‍Future</code> رو پیاده سازی کرده.</p>
+<pre><code class="language-rust edition2018 ignore">
+// تابع زیر تایپی رو برمیگردونه که &quot;تریت&quot; زیر رو پیاده سازی کرده:
+// `Future&lt;Output = u8&gt;`
+// که باعث میشه در نهایت تایپ زیر برگرده:
+// u8
+async fn foo() -&gt; u8 { 5 }
+
+fn bar() -&gt; impl Future&lt;Output = u8&gt; {
+    // بلاک زیر تایپی رو برمیگردونه از نوع:
+    // `Future&lt;Output = u8&gt;`
+    async {
+        let x: u8 = foo().await;
+        x + 5
+    }
+}
+</code></pre>
+<p>همونطور که توی فصل اول دیدیم بدنه <code>async</code> و بقیه Future ها تنبل هستن:
+به این معنی که تا زمانی که اجرا نشن هیچ کاری نمیکنن. معمول ترین روش اجرا کردن <code>Future</code> اینه که منتظرش بمونید یا <code>.await</code> اش کنید.
+زمانی که <code>.await</code> روی یه <code>Future</code> صدا زده میشه سعی میکنه اونو اجراش کنه تا با موفقیت تموم بشه. اگه <code>Future</code> بلاک کننده و مسدود کندده thread باشه کنترل رو به thread بر میگردونه. وقتی پردازش بیشتری میتونه انجام بشه <code>Future</code> دوباره توسط اجرا کننده برداشته میشه و ادامه پردازشش انجام میشه و این باعث میشه <code>.await</code> با موفقیت تکمیل بشه.</p>
+<h2 id="lifetime-های-async"><a class="header" href="#lifetime-های-async">Lifetime های <code>async</code></a></h2>
+<p>برعکس توابع معمول در Rust، توابع <code>async fn</code> ای که رفرنس ها یا آرگومان های غیر از <code>static</code> رو به عنوان ورودی میگیرن، <code>Future</code> ای بر میگردونن که lifetime شون دقیقا مثل lifetime آرگومان هاشون هست:</p>
+<pre><code class="language-rust edition2018 ignore">// این تابع:
+async fn foo(x: &amp;u8) -&gt; u8 { *x }
+
+// با این تابع برابره:
+fn foo_expanded&lt;'a&gt;(x: &amp;'a u8) -&gt; impl Future&lt;Output = u8&gt; + 'a {
+    async move { *x }
+}
+</code></pre>
+<p>که یعنی تابع <code>async fn</code> ای که یک Future بر میگردونه باید توسط <code>.await</code> صدا زده بشه در حالی که هنوز آرگومان های غیر <code>static</code> اش موجود هستن.
+تو حالت عادی موقعی که <code>.await</code> میکنید بعد از اینکه تابع رو صدا میزنید مثلا مثل <code>foo(&amp;x).await</code> موردی به موجود نمیاد و مشکلی نیست.
+با این حال، ذخیره کردن Future ها یا ارسالشون به یک task یا thread دیگه ممکنه مشکل ساز بشه.</p>
+<p>یکی از کارهایی که برای تبدیل <code>asyn fn</code> با آرگومان هایی از جنس رفرنس به Future های <code>'static</code> میشه انجام داد، اینه که آرگومان ها رو با صدا کردن <code>async fn</code> داخل یک بلاک <code>async</code> جا بدیم:</p>
+<pre><code class="language-rust edition2018 ignore">fn bad() -&gt; impl Future&lt;Output = u8&gt; {
+    let x = 5;
+    borrow_x(&amp;x) // ارور: مقدار &quot;ایکس&quot; زمان زیادی زنده نیست یعنی لایف تایمش اجازه نمیده
+}
+
+fn good() -&gt; impl Future&lt;Output = u8&gt; {
+    async {
+        let x = 5;
+        borrow_x(&amp;x).await
+    }
+}
+</code></pre>
+<p>با انتقال آرگومان ها به بلاک <code>async</code>، lifetime اون رو بسط دادیم به lifetime اون <code>Future</code> ای که از صدا زدن <code>good</code> برمگیرده.</p>
+<h2 id="async-move"><a class="header" href="#async-move"><code>async move</code></a></h2>
+<p>بلاک های <code>async</code> و clouser مثل clouser های عادی اجازه استفاده از کلیدواژه <code>move</code> رو میده.
+یه بلاک <code>async move</code> باعث میشه مالکیت تمام متغیر هایی که به عنوان رفرنس استفاده میشن رو بگیره و عمرشون دقیقا به اون scope محدود بشه که این قابلیت باعث میشه دیگه نشه ازشون تو قسمت های دیگه کد استفاده کرد:</p>
+<pre><code class="language-rust edition2018 ignore">/// `async` block:
+///
+/// چندین بلاک از نوع زیر میتونن به متغیر های لوکال دسترسی داشته باشن
+/// البته تا وقتی که تو اون اسکوپ اجرا بشن
+async fn blocks() {
+    let my_string = &quot;foo&quot;.to_string();
+
+    let future_one = async {
+        // ...
+        println!(&quot;{my_string}&quot;);
+    };
+
+    let future_two = async {
+        // ...
+        println!(&quot;{my_string}&quot;);
+    };
+
+    // هر دو &quot;فیوچر&quot; اجرا میشه تا در نهایت دو بار مقدار زیر تپرینت میشه:
+    // &quot;foo&quot;
+    let ((), ()) = futures::join!(future_one, future_two);
+}
+
+/// `async move` block:
+///
+/// فقط یک بلاکی که کلیدواژه &quot;موو&quot; داره میتونه به مقادیر لوکال در لحظه دسترسی داشته باشه
+/// به خاطر اینکه اون مقادیر به اسکوپ &quot;فیوچر&quot; منتقل شدن
+/// البته همین باعث میشه اون &quot;فیوچر&quot; بیشتر از اسکوپ اصلی زنده بمونه و دووم بیاره:
+fn move_block() -&gt; impl Future&lt;Output = ()&gt; {
+    let my_string = &quot;foo&quot;.to_string();
+    async move {
+        // ...
+        println!(&quot;{my_string}&quot;);
+    }
+}
+</code></pre>
+<h2 id="await-کردن-روی-یک-اجراکننده-multi-thread"><a class="header" href="#await-کردن-روی-یک-اجراکننده-multi-thread"><code>.await</code> کردن روی یک اجراکننده Multi-thread</a></h2>
+<p>دقت کنید که وقتی از یک اجرا کننده <code>Future</code> به صورت Multi-thread استفاده میکنیم، <code>Future</code> ها میتونن بین thread ها منتقل بشن پس هم این Future ها هم متغیر ها باید امکان انتقال بین thread ها رو داشته باشن، چون هر درخواست <code>.await</code> میتونه منجر به تعویض thread بشه.</p>
+<p>که این یعنی استفاده از <code>Rc</code> یا <code>&amp;RefCell</code> یا تایپ های دیگه ای که trait <code>Send</code> رو پیاده سازی نکردن و همچنین رفرنس هایی که به تایپ هایی اشاره دارن که trait <code>Sync</code> رو پیاده سازی نکردن، امن نیست.</p>
+<p>(احتیاط: امکانش وجود داره از این تایپ ها استفاده کنید البته تا زمانی که توی scope ای که <code>.await</code> صدا زده میشه نباشن.)</p>
+<p>به طور مشابه، ایده خوبی نیست مقادیر غیر Future ای lock شده رو توی <code>.await</code> ها استفاده کنید، چون باعث lock شدن یا قفل شدن thread pool میشه: مثلا ممکنه یه task باعث lock بشه و <code>.await</code> هم صدا زده بشه و قدرت کنترل برگرده به اجراکننده تا یه task دیگه انجام بشه که سعی کنه همون چیز رو lock کنه و همین باعث ایجاد deadlock بشه.
+برای جلوگیری از این مشکل از تایپ <code>Mutex</code> داخل <code>future::lock</code> به جای <code>std::sync</code> استفاده کنید.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../02_execution/05_io.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                            <a rel="next" href="../04_pinning/01_chapter.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../02_execution/05_io.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                    <a rel="next" href="../04_pinning/01_chapter.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        <script src="../elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../searcher.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+    </body>
+</html>
