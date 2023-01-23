@@ -28,46 +28,32 @@
 تو حالت عادی موقعی که `.await` میکنید بعد از اینکه تابع رو صدا میزنید مثلا مثل `foo(&x).await` موردی به موجود نمیاد و مشکلی نیست.
 با این حال، ذخیره کردن Future ها یا ارسالشون به یک task یا thread دیگه ممکنه مشکل ساز بشه.
 
-One common workaround for turning an `async fn` with references-as-arguments
-into a `'static` future is to bundle the arguments with the call to the
-`async fn` inside an `async` block:
+یکی از کارهایی که برای تبدیل `asyn fn` با آرگومان هایی از جنس رفرنس به Future های `'static` میشه انجام داد، اینه که آرگومان ها رو با صدا کردن `async fn` داخل یک بلاک `async` جا بدیم:
 
 ```rust,edition2018,ignore
 {{#include ../../examples/03_01_async_await/src/lib.rs:static_future_with_borrow}}
 ```
 
-By moving the argument into the `async` block, we extend its lifetime to match
-that of the `Future` returned from the call to `good`.
+با انتقال آرگومان ها به بلاک `async`، lifetime اون رو بسط دادیم به lifetime اون `Future` ای که از صدا زدن `good` برمگیرده.
 
 ## `async move`
 
-`async` blocks and closures allow the `move` keyword, much like normal
-closures. An `async move` block will take ownership of the variables it
-references, allowing it to outlive the current scope, but giving up the ability
-to share those variables with other code:
+بلاک های `async` و clouser مثل clouser های عادی اجازه استفاده از کلیدواژه `move` رو میده.
+یه بلاک `async move` باعث میشه مالکیت تمام متغیر هایی که به عنوان رفرنس استفاده میشن رو بگیره و عمرشون دقیقا به اون scope محدود بشه که این قابلیت باعث میشه دیگه نشه ازشون تو قسمت های دیگه کد استفاده کرد:
 
 ```rust,edition2018,ignore
 {{#include ../../examples/03_01_async_await/src/lib.rs:async_move_examples}}
 ```
 
-## `.await`ing on a Multithreaded Executor
+## `.await` کردن روی یک اجراکننده Multi-thread
 
-Note that, when using a multithreaded `Future` executor, a `Future` may move
-between threads, so any variables used in `async` bodies must be able to travel
-between threads, as any `.await` can potentially result in a switch to a new
-thread.
+دقت کنید که وقتی از یک اجرا کننده `Future` به صورت Multi-thread استفاده میکنیم، `Future` ها میتونن بین thread ها منتقل بشن پس هم این Future ها هم متغیر ها باید امکان انتقال بین thread ها رو داشته باشن، چون هر درخواست `.await` میتونه منجر به تعویض thread بشه.
 
-This means that it is not safe to use `Rc`, `&RefCell` or any other types
-that don't implement the `Send` trait, including references to types that don't
-implement the `Sync` trait.
+که این یعنی استفاده از `Rc` یا `&RefCell` یا تایپ های دیگه ای که trait `Send` رو پیاده سازی نکردن و همچنین رفرنس هایی که به تایپ هایی اشاره دارن که trait `Sync` رو پیاده سازی نکردن، امن نیست.
 
-(Caveat: it is possible to use these types as long as they aren't in scope
-during a call to `.await`.)
+(احتیاط: امکانش وجود داره از این تایپ ها استفاده کنید البته تا زمانی که توی scope ای که `.await` صدا زده میشه نباشن.)
 
-Similarly, it isn't a good idea to hold a traditional non-futures-aware lock
-across an `.await`, as it can cause the threadpool to lock up: one task could
-take out a lock, `.await` and yield to the executor, allowing another task to
-attempt to take the lock and cause a deadlock. To avoid this, use the `Mutex`
-in `futures::lock` rather than the one from `std::sync`.
+به طور مشابه، ایده خوبی نیست مقادیر غیر Future ای lock شده رو توی `.await` ها استفاده کنید، چون باعث lock شدن یا قفل شدن thread pool میشه: مثلا ممکنه یه task باعث lock بشه و `.await` هم صدا زده بشه و قدرت کنترل برگرده به اجراکننده تا یه task دیگه انجام بشه که سعی کنه همون چیز رو lock کنه و همین باعث ایجاد deadlock بشه.
+برای جلوگیری از این مشکل از تایپ `Mutex` داخل `future::lock` به جای `std::sync` استفاده کنید.
 
 [فصل اول]: ../01_getting_started/04_async_await_primer.md
