@@ -18,19 +18,15 @@
 
 ## Lifetime های `async`
 
-Unlike traditional functions, `async fn`s which take references or other
-non-`'static` arguments return a `Future` which is bounded by the lifetime of
-the arguments:
+برعکس توابع معمول در Rust، توابع `async fn` ای که رفرنس ها یا آرگومان های غیر از `static` رو به عنوان ورودی میگیرن، `Future` ای بر میگردونن که lifetime شون دقیقا مثل lifetime آرگومان هاشون هست:
 
 ```rust,edition2018,ignore
 {{#include ../../examples/03_01_async_await/src/lib.rs:lifetimes_expanded}}
 ```
 
-This means that the future returned from an `async fn` must be `.await`ed
-while its non-`'static` arguments are still valid. In the common
-case of `.await`ing the future immediately after calling the function
-(as in `foo(&x).await`) this is not an issue. However, if storing the future
-or sending it over to another task or thread, this may be an issue.
+که یعنی تابع `async fn` ای که یک Future بر میگردونه باید توسط `.await` صدا زده بشه در حالی که هنوز آرگومان های غیر `static` اش موجود هستن.
+تو حالت عادی موقعی که `.await` میکنید بعد از اینکه تابع رو صدا میزنید مثلا مثل `foo(&x).await` موردی به موجود نمیاد و مشکلی نیست.
+با این حال، ذخیره کردن Future ها یا ارسالشون به یک task یا thread دیگه ممکنه مشکل ساز بشه.
 
 One common workaround for turning an `async fn` with references-as-arguments
 into a `'static` future is to bundle the arguments with the call to the
